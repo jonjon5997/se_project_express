@@ -1,11 +1,19 @@
 // Import necessary modules
 const express = require("express"); // Import Express
+const mongoose = require("mongoose");
 
 // Create an Express application
 const app = express();
 
 // Define a port
 const { PORT = 3001 } = process.env;
+
+mongoose
+  .connect("mongodb://127.0.0.1:27017/wtwr_db")
+  .then(() => {
+    console.log("connected to mongodb");
+  })
+  .catch((e) => console.error(e));
 
 // // Middleware to parse JSON requests
 // app.use(express.json());
