@@ -1,6 +1,7 @@
 // Import necessary modules
 const express = require("express"); // Import Express
 const mongoose = require("mongoose");
+const mainRouter = require("./routes/index");
 
 // Create an Express application
 const app = express();
@@ -14,6 +15,8 @@ mongoose
     console.log("connected to mongodb");
   })
   .catch((e) => console.error(e));
+
+app.use("/", mainRouter);
 
 // // Middleware to parse JSON requests
 // app.use(express.json());
