@@ -21,7 +21,8 @@
   "homepage": "https://github.com/jonjon5997/se_project_express#readme",
   "dependencies": {
     "express": "^4.21.2",
-    "mongoose": "^6.6.1"
+    "mongoose": "^6.6.1",
+    "validator": "^13.12.0"
   },
   "devDependencies": {
     "eslint": "^8.57.1",
