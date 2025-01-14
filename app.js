@@ -15,16 +15,9 @@ mongoose
     console.log("connected to mongodb");
   })
   .catch((e) => console.error(e));
-
-app.use("/", mainRouter);
-
 // // Middleware to parse JSON requests
-// app.use(express.json());
-
-// // Define a basic route
-// app.get('/', (req, res) => {
-//   res.send('Hello, World! Welcome to the Express server.');
-// });
+app.use(express.json());
+app.use("/", mainRouter);
 
 // Start the server and listen on the specified port
 app.listen(PORT, () => {
