@@ -21,6 +21,7 @@ module.exports = {
   },
   rules: {
     // "no-console": ["warn", { allow: ["error"] }],
+    // Allow _id (used in MongoDB) while enforcing no dangling underscores elsewhere
     "no-underscore-dangle": ["error", { allow: ["_id"] }],
   },
 };
