@@ -2,6 +2,7 @@
 const express = require("express"); // Import Express
 const mongoose = require("mongoose");
 const mainRouter = require("./routes/index");
+const routes = require("./routes");
 
 // Create an Express application
 const app = express();
@@ -19,7 +20,6 @@ mongoose
 app.use(express.json());
 app.use("/", mainRouter);
 
-const routes = require("./routes");
 app.use(express.json());
 app.use(routes);
 

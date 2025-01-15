@@ -41,7 +41,7 @@ const deleteItem = (req, res) => {
   console.log(itemId);
   ClothingItem.findOneAndDelete(itemId)
     .orFail()
-    .then((item) => res.status(204).send({}))
+    .then((item) => res.status(204).send({ item }))
     .catch((err) => {
       res.status(500).send({ message: "Error from deleteItem", err });
     });
