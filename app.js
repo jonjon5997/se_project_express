@@ -29,7 +29,7 @@ app.use(express.json());
 // Middleware to set a mock user ID
 app.use((req, res, next) => {
   req.user = {
-    _id: "5d8b8592978f8bd833ca8133", // Mock user ID
+    _id: "678701efa56f151e26245585", // Mock user ID
   };
   next();
 });
