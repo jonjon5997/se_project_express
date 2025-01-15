@@ -34,20 +34,6 @@ app.use((req, res, next) => {
   next();
 });
 
-// Middleware to handle 400 Bad Request errors
-app.use((err, req, res, next) => {
-  if (err.name === "ValidationError" || err.status === 400) {
-    return res.status(400).json({ message: err.message || "Bad Request" });
-  }
-  next(err); // Pass other errors to the default error handler
-});
-
-// Default Error Handler
-app.use((err, req, res, next) => {
-  console.error(err); // Log the error for debugging purposes
-  res.status(500).json({ message: "Internal Server Error" });
-});
-
 // Start the server and listen on the specified port
 app.listen(PORT, () => {
   console.log(`Server is running on http://localhost:${PORT}`);
