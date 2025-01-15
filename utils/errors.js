@@ -14,7 +14,7 @@
 //     });
 // }
 
-const User = require("../models/User"); // Import the User model
+const User = require("../models/user"); // Import the User model
 
 const createUser = (req, res) => {
   User.create(req.body) // assumes `req.body` contains the user data
