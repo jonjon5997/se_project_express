@@ -1,7 +1,5 @@
 const User = require("../models/user");
 
-//GET users
-
 const getUsers = (req, res) => {
   User.find({})
     .then((users) => res.status(200).send(users))
@@ -13,7 +11,6 @@ const getUsers = (req, res) => {
 
 const createUser = (req, res) => {
   const { name, avatar } = req.body;
-  //   console.log(name, avatar);
   User.create({ name, avatar })
     .then((user) => res.status(201).send(user))
     .catch((err) => {
@@ -35,8 +32,7 @@ const getUser = (req, res) => {
       if (err.name === "DocumentNotFoundError") {
         return res.status(404).send({ message: err.message });
       }
-      //handle the cast request
-      else if (err.name === "CastError") {
+      if (err.name === "CastError") {
         return res.status(400).send({ message: "Invalid user ID format" });
       }
       return res.status(500).send({ message: err.message });
