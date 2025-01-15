@@ -14,6 +14,8 @@
 //     });
 // }
 
+const User = require("../models/User"); // Import the User model
+
 const createUser = (req, res) => {
   User.create(req.body) // assumes `req.body` contains the user data
     .then((user) => res.status(201).send(user)) // 201 Created for successful user creation
@@ -40,3 +42,5 @@ const createUser = (req, res) => {
         .send({ message: "An internal server error occurred" });
     });
 };
+
+module.exports = { createUser };
