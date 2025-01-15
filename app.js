@@ -23,6 +23,17 @@ app.use("/", mainRouter);
 app.use(express.json());
 app.use(routes);
 
+// Middleware to parse JSON requests
+app.use(express.json());
+
+// Middleware to set a mock user ID
+app.use((req, res, next) => {
+  req.user = {
+    _id: "5d8b8592978f8bd833ca8133", // Mock user ID
+  };
+  next();
+});
+
 // Start the server and listen on the specified port
 app.listen(PORT, () => {
   console.log(`Server is running on http://localhost:${PORT}`);
