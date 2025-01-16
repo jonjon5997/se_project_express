@@ -44,7 +44,7 @@ const deleteItem = (req, res) => {
           .status(ERROR_CODES.NOT_FOUND)
           .send({ message: "Item not found" });
       }
-      res
+      return res
         .status(ERROR_CODES.SERVER_ERROR)
         .send({ message: "Internal Server Error" });
     });
@@ -72,7 +72,7 @@ const likeItem = (req, res) => {
           .status(ERROR_CODES.NOT_FOUND)
           .send({ message: "Item not found" });
       }
-      res
+      return res
         .status(ERROR_CODES.SERVER_ERROR)
         .send({ message: "Internal Server Error" });
     });
@@ -101,7 +101,7 @@ const unlikeItem = (req, res) => {
           .status(ERROR_CODES.NOT_FOUND)
           .send({ message: "Item not found" });
       }
-      res
+      return res
         .status(ERROR_CODES.SERVER_ERROR)
         .send({ message: "Internal Server Error" });
     });
