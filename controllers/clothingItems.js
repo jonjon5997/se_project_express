@@ -1,4 +1,5 @@
 const ClothingItem = require("../models/clothingItem");
+const { ERROR_CODES } = require("../utils/constants");
 
 const createItem = (req, res) => {
   console.log(req);
@@ -9,10 +10,13 @@ const createItem = (req, res) => {
   ClothingItem.create({ name, weather, imageUrl })
     .then((item) => {
       console.log(item);
-      res.send({ data: item });
+      res.status(201).send({ data: item });
     })
     .catch((err) => {
-      res.status(500).send({ message: "Error from createItem", err });
+      console.error("Error in createItem:", err);
+      res
+        .status(ERROR_CODES.SERVER_ERROR)
+        .send({ message: "Internal Server Error" });
     });
 };
 
@@ -20,31 +24,30 @@ const getItems = (req, res) => {
   ClothingItem.find({})
     .then((items) => res.status(200).send(items))
     .catch((err) => {
-      res.status(500).send({ message: "Error from getItems", err });
-    });
-};
-
-const updateItem = (req, res) => {
-  const { itemId } = req.params;
-  const { imageUrl } = req.body;
-
-  ClothingItem.findByIdAndUpdate(itemId, { $set: { imageUrl } })
-    .orFail()
-    .then((item) => res.status(200).send({ data: item }))
-    .catch((err) => {
-      res.status(500).send({ message: "Error from updateItem", err });
+      console.error("Error in getItems:", err);
+      res
+        .status(ERROR_CODES.SERVER_ERROR)
+        .send({ message: "Internal Server Error" });
     });
 };
 
 const deleteItem = (req, res) => {
   const { itemId } = req.params;
-  console.log(itemId);
-  ClothingItem.findOneAndDelete(itemId)
+
+  ClothingItem.findOneAndDelete({ _id: itemId })
     .orFail()
-    .then((item) => res.status(204).send({ item }))
+    .then(() => res.status(204).send()) // No content response
     .catch((err) => {
-      res.status(500).send({ message: "Error from deleteItem", err });
+      console.error("Error in deleteItem:", err);
+      if (err.name === "DocumentNotFoundError") {
+        return res
+          .status(ERROR_CODES.NOT_FOUND)
+          .send({ message: "Item not found" });
+      }
+      res
+        .status(ERROR_CODES.SERVER_ERROR)
+        .send({ message: "Internal Server Error" });
     });
 };
 
-module.exports = { createItem, getItems, updateItem, deleteItem };
+module.exports = { createItem, getItems, deleteItem };
