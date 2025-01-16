@@ -1,9 +1,39 @@
 # WTWR (What to Wear?): Back End
-The back-end project is focused on creating a server for the WTWR application. You’ll gain a deeper understanding of how to work with databases, set up security and testing, and deploy web applications on a remote machine. The eventual goal is to create a server with an API and user authorization.
-## Running the Project
-`npm run start` — to launch the server 
 
-`npm run dev` — to launch the server with the hot reload feature
+Project Description and Functionality
+The project is a clothing item manager API designed to allow users to manage and interact with a collection of clothing items. Key features include:
 
-### Testing
-Before committing your code, make sure you edit the file `sprint.txt` in the root folder. The file `sprint.txt` should contain the number of the sprint you're currently working on. For ex. 12
+# Item Management:
+
+Users can create, view, and delete clothing items in the database.
+Each clothing item includes details such as its name, weather type (hot, warm, cold), image URL, owner, likes, and creation timestamp.
+User Interaction:
+
+Users can like and unlike clothing items, with the system maintaining a unique list of likes for each item.
+The functionality ensures no duplicate likes are added, and only authorized users can perform certain actions.
+
+# Error Handling:
+
+Provides robust error management for invalid input, missing resources, and server errors with user-friendly messages.
+Follows a centralized error-handling structure to ensure consistency across the application.
+
+# Technologies and Techniques Used
+
+# Technologies:
+
+Node.js: Backend runtime for building the API.
+Express.js: Web framework used to define routes and handle HTTP requests/responses.
+MongoDB: NoSQL database for storing clothing items and user data.
+Mongoose: Object Data Modeling (ODM) library to define schemas, handle relationships, and query MongoDB.
+Validator.js: For validating user input, including URLs.
+Techniques:
+
+# RESTful API Design:
+
+Adheres to REST principles, making the API intuitive and scalable.
+Enum Validation: Ensures the weather field only accepts predefined values (hot, warm, cold) for data consistency.
+Middleware: Leverages Express middleware for centralized error handling and user authentication.
+Schema Validation: Uses Mongoose schemas to enforce strict validation rules for all data models.
+Modular Architecture: Organizes the codebase into separate files for controllers, routes, and models to maintain clarity and reusability.
+Efficient Updates: Uses MongoDB operators like $addToSet and $pull for atomic updates to the likes array, ensuring high performance.
+Error Codes: Implements a constants file for error codes to standardize responses across the API
