@@ -50,4 +50,61 @@ const deleteItem = (req, res) => {
     });
 };
 
-module.exports = { createItem, getItems, deleteItem };
+const likeItem = (req, res) => {
+  const { itemId } = req.params;
+  // Add the user ID to the likes array
+  ClothingItem.findByIdAndUpdate(
+    itemId,
+    { $addToSet: { likes: req.user._id } }, // Prevent duplicate likes
+    { new: true } // Return the updated document
+  )
+    .orFail()
+    .then((item) => res.status(200).send({ data: item }))
+    .catch((err) => {
+      console.error("Error in likeItem:", err);
+      if (err.name === "CastError") {
+        return res
+          .status(ERROR_CODES.BAD_REQUEST)
+          .send({ message: "Invalid item ID format" });
+      }
+      if (err.name === "DocumentNotFoundError") {
+        return res
+          .status(ERROR_CODES.NOT_FOUND)
+          .send({ message: "Item not found" });
+      }
+      res
+        .status(ERROR_CODES.SERVER_ERROR)
+        .send({ message: "Internal Server Error" });
+    });
+};
+
+const unlikeItem = (req, res) => {
+  const { itemId } = req.params;
+
+  // Remove the user ID from the likes array
+  ClothingItem.findByIdAndUpdate(
+    itemId,
+    { $pull: { likes: req.user._id } }, // Remove the user's ID
+    { new: true } // Return the updated document
+  )
+    .orFail()
+    .then((item) => res.status(200).send({ data: item }))
+    .catch((err) => {
+      console.error("Error in unlikeItem:", err);
+      if (err.name === "CastError") {
+        return res
+          .status(ERROR_CODES.BAD_REQUEST)
+          .send({ message: "Invalid item ID format" });
+      }
+      if (err.name === "DocumentNotFoundError") {
+        return res
+          .status(ERROR_CODES.NOT_FOUND)
+          .send({ message: "Item not found" });
+      }
+      res
+        .status(ERROR_CODES.SERVER_ERROR)
+        .send({ message: "Internal Server Error" });
+    });
+};
+
+module.exports = { createItem, getItems, deleteItem, likeItem, unlikeItem };
