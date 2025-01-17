@@ -8,7 +8,7 @@ const getUsers = (req, res) => {
       console.error(err);
       return res
         .status(ERROR_CODES.SERVER_ERROR)
-        .send({ message: err.message });
+        .send({ message: "An error has occurred on the server" });
     });
 };
 
@@ -21,11 +21,11 @@ const createUser = (req, res) => {
       if (err.name === "ValidationError") {
         return res
           .status(ERROR_CODES.BAD_REQUEST)
-          .send({ message: err.message });
+          .send({ message: "Invalid input data" });
       }
       return res
         .status(ERROR_CODES.SERVER_ERROR)
-        .send({ message: err.message });
+        .send({ message: "An error has occurred on the server" });
     });
 };
 
@@ -37,7 +37,9 @@ const getUser = (req, res) => {
     .catch((err) => {
       console.error(err);
       if (err.name === "DocumentNotFoundError") {
-        return res.status(ERROR_CODES.NOT_FOUND).send({ message: err.message });
+        return res
+          .status(ERROR_CODES.NOT_FOUND)
+          .send({ message: "User not found" });
       }
       if (err.name === "CastError") {
         return res
@@ -46,7 +48,7 @@ const getUser = (req, res) => {
       }
       return res
         .status(ERROR_CODES.SERVER_ERROR)
-        .send({ message: err.message });
+        .send({ message: "An error has occurred on the server" });
     });
 };
 

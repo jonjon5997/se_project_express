@@ -7,14 +7,20 @@ const createItem = (req, res) => {
 
   const { name, weather, imageUrl } = req.body;
 
-  ClothingItem.create({ name, weather, imageUrl })
+  ClothingItem.create({ name, weather, imageUrl, owner: req.user._id })
     .then((item) => {
       console.log(item);
       res.status(201).send({ data: item });
     })
     .catch((err) => {
-      console.error("Error in createItem:", err);
-      res
+      // Check for ValidationError
+      if (err.name === "ValidationError") {
+        return res
+          .status(ERROR_CODES.BAD_REQUEST)
+          .send({ message: "Invalid input data" });
+      }
+
+      return res
         .status(ERROR_CODES.SERVER_ERROR)
         .send({ message: "Internal Server Error" });
     });
@@ -36,13 +42,22 @@ const deleteItem = (req, res) => {
 
   ClothingItem.findOneAndDelete({ _id: itemId })
     .orFail()
-    .then(() => res.status(204).send()) // No content response
+    .then((deletedItem) => {
+      res.status(200).send({
+        message: "Item successfully deleted",
+        data: deletedItem,
+      });
+    })
     .catch((err) => {
       console.error("Error in deleteItem:", err);
       if (err.name === "DocumentNotFoundError") {
         return res
           .status(ERROR_CODES.NOT_FOUND)
           .send({ message: "Item not found" });
+      } else if (err.name === "CastError") {
+        return res
+          .status(ERROR_CODES.BAD_REQUEST)
+          .send({ message: "Invalid item ID format" });
       }
       return res
         .status(ERROR_CODES.SERVER_ERROR)
