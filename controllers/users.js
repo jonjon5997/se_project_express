@@ -1,3 +1,4 @@
+const bcrypt = require("bcryptjs");
 const User = require("../models/user");
 const { ERROR_CODES } = require("../utils/constants");
 
@@ -13,11 +14,32 @@ const getUsers = (req, res) => {
 };
 
 const createUser = (req, res) => {
-  const { name, avatar } = req.body;
-  User.create({ name, avatar })
-    .then((user) => res.status(201).send(user))
+  const { name, avatar, email, password } = req.body;
+
+  bcrypt
+    .hash(password, 10)
+    .then((hashedPassword) =>
+      User.create({ name, avatar, email, password: hashedPassword })
+    )
+
+    .then((user) =>
+      res.status(201).send({
+        // Exclude password from the response
+        name: user.name,
+        avatar: user.avatar,
+        email: user.email,
+        _id: user._id,
+      })
+    )
     .catch((err) => {
       console.error(err);
+      // Handle duplicate email error
+      if (err.code === 11000) {
+        return res
+          .status(ERROR_CODES.CONFLICT)
+          .send({ message: "A user with this email already exists" });
+      }
+
       if (err.name === "ValidationError") {
         return res
           .status(ERROR_CODES.BAD_REQUEST)
