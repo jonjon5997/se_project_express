@@ -3,6 +3,7 @@ const ERROR_CODES = {
   BAD_REQUEST: 400,
   NOT_FOUND: 404,
   CONFLICT: 409,
+  UNAUTHORIZED: 401,
 };
 
 module.exports = { ERROR_CODES };

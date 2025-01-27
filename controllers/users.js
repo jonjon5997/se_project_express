@@ -1,6 +1,8 @@
+const jwt = require("jsonwebtoken");
 const bcrypt = require("bcryptjs");
 const User = require("../models/user");
 const { ERROR_CODES } = require("../utils/constants");
+const { JWT_SECRET } = require("../utils/config");
 
 const getUsers = (req, res) => {
   User.find({})
@@ -74,4 +76,30 @@ const getUser = (req, res) => {
     });
 };
 
-module.exports = { getUsers, createUser, getUser };
+//create login controller that gets email and pasword from
+//the request and authenticates them
+//
+const login = (req, res) => {
+  const { email, password } = req.body;
+
+  // Using the custom Mongoose method `findUserByCredentials`
+  User.findUserByCredentials(email, password)
+    .then((user) => {
+      // Create a JWT token with a 7-day expiration
+      const token = jwt.sign({ _id: user._id }, JWT_SECRET, {
+        expiresIn: "7d",
+      });
+
+      // Send the token in the response body
+      res.status(200).send({ token });
+    })
+    .catch((err) => {
+      console.error(err);
+      // Return a 401 Unauthorized error if authentication fails
+      res
+        .status(ERROR_CODES.UNAUTHORIZED)
+        .send({ message: "Invalid email or password" });
+    });
+};
+
+module.exports = { getUsers, createUser, getUser, login };
