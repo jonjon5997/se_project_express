@@ -82,8 +82,8 @@ const updateUserProfile = (req, res) => {
     userId,
     { name, avatar },
     {
-      new: true, //return the updated document
-      runValidators: true, //Ensure schema validators are applied
+      new: true, // Return updated document
+      runValidators: true, // Ensure schema validators are applied
     }
   )
     .then((user) => {
@@ -92,7 +92,7 @@ const updateUserProfile = (req, res) => {
           .status(ERROR_CODES.NOT_FOUND)
           .send({ message: "User not found" });
       }
-      res.status(200).send(user); //Send the updated user
+      return res.status(200).send(user); // Send the updated user
     })
     .catch((err) => {
       console.error(err);
@@ -107,8 +107,8 @@ const updateUserProfile = (req, res) => {
     });
 };
 
-//create login controller that gets email and pasword from
-//the request and authenticates them
+// create login controller that gets email and pasword from
+// the request and authenticates them
 //
 const login = (req, res) => {
   const { email, password } = req.body;

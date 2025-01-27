@@ -1,4 +1,4 @@
-//imports
+// Imports
 const jwt = require("jsonwebtoken");
 const { JWT_SECRET } = require("../utils/config");
 const { ERROR_CODES } = require("../utils/constants");

@@ -1,10 +1,10 @@
 // Import necessary modules
 const express = require("express"); // Import Express
 const mongoose = require("mongoose");
+const cors = require("cors");
 const { login, createUser } = require("./controllers/users");
 const mainRouter = require("./routes/index");
 const auth = require("./middlewares/auth");
-const cors = require("cors");
 
 // Create an Express application
 const app = express();
