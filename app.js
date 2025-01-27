@@ -21,13 +21,13 @@ mongoose
 // // Middleware to parse JSON requests
 app.use(express.json());
 
-// Middleware to set a mock user ID
-app.use((req, res, next) => {
-  req.user = {
-    _id: "678701efa56f151e26245585", // Mock user ID
-  };
-  next();
-});
+// // Middleware to set a mock user ID
+// app.use((req, res, next) => {
+//   req.user = {
+//     _id: "678701efa56f151e26245585", // Mock user ID
+//   };
+//   next();
+// });
 
 // Use the main router for routes
 app.use("/", mainRouter);
@@ -37,6 +37,9 @@ app.post("/signup", createUser);
 
 // Use the auth middleware for all protected routes
 app.use(auth);
+
+// use the user routes
+app.use("/users", require("./routes/users"));
 
 // Start the server and listen on the specified port
 app.listen(PORT, () => {

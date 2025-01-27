@@ -53,8 +53,8 @@ const createUser = (req, res) => {
     });
 };
 
-const getUser = (req, res) => {
-  const { userId } = req.params;
+const getCurrentUser = (req, res) => {
+  const { userId } = req.user;
   User.findById(userId)
     .orFail()
     .then((user) => res.status(200).send(user))
@@ -73,6 +73,39 @@ const getUser = (req, res) => {
       return res
         .status(ERROR_CODES.SERVER_ERROR)
         .send({ message: "An error has occurred on the server" });
+    });
+};
+
+const updateUserProfile = (req, res) => {
+  const { name, avatar } = req.body;
+  const userId = req.user._id; // Get user ID from request payload (set by auth middleware)
+
+  User.findByIdAndUpdate(
+    userId,
+    { name, avatar },
+    {
+      new: true, //return the updated document
+      runValidators: true, //Ensure schema validators are applied
+    }
+  )
+    .then((user) => {
+      if (!user) {
+        return res
+          .status(ERROR_CODES.NOT_FOUND)
+          .send({ message: "User not found" });
+      }
+      res.status(200).send(user); //Send the updated user
+    })
+    .catch((err) => {
+      console.error(err);
+      if (err.name === "ValidationError") {
+        return res
+          .status(ERROR_CODES.BAD_REQUEST)
+          .send({ message: "Invalid input data" });
+      }
+      return res
+        .status(ERROR_CODES.SERVER_ERROR)
+        .send({ message: "An error occurred on the server" });
     });
 };
 
@@ -102,4 +135,10 @@ const login = (req, res) => {
     });
 };
 
-module.exports = { getUsers, createUser, getUser, login };
+module.exports = {
+  getUsers,
+  createUser,
+  getCurrentUser,
+  login,
+  updateUserProfile,
+};
