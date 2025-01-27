@@ -1,6 +1,7 @@
 // Import necessary modules
 const express = require("express"); // Import Express
 const mongoose = require("mongoose");
+const { login, createUser } = require("./controllers/users");
 const mainRouter = require("./routes/index");
 
 // Create an Express application
@@ -29,6 +30,9 @@ app.use((req, res, next) => {
 
 // Use the main router for routes
 app.use("/", mainRouter);
+
+app.post("/signin", login);
+app.post("/signup", createUser);
 
 // Start the server and listen on the specified port
 app.listen(PORT, () => {
