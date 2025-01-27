@@ -3,6 +3,7 @@ const express = require("express"); // Import Express
 const mongoose = require("mongoose");
 const { login, createUser } = require("./controllers/users");
 const mainRouter = require("./routes/index");
+const auth = require("./middlewares/auth");
 
 // Create an Express application
 const app = express();
@@ -33,6 +34,9 @@ app.use("/", mainRouter);
 
 app.post("/signin", login);
 app.post("/signup", createUser);
+
+// Use the auth middleware for all protected routes
+app.use(auth);
 
 // Start the server and listen on the specified port
 app.listen(PORT, () => {
