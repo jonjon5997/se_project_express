@@ -7,9 +7,10 @@ const auth = (req, res, next) => {
   const { authorization } = req.headers;
 
   if (!authorization || !authorization.startsWith("Bearer ")) {
-    return res
+    res
       .status(ERROR_CODES.UNAUTHORIZED)
       .send({ message: "Authorization required" });
+    return; // Explicitly return to ensure no further execution
   }
 
   const token = authorization.replace("Bearer ", "");
@@ -19,7 +20,7 @@ const auth = (req, res, next) => {
     req.user = payload; // Attach the token payload to the request object
     next(); // Proceed to the next middleware or route handler
   } catch (err) {
-    return res
+    res
       .status(ERROR_CODES.UNAUTHORIZED)
       .send({ message: "Invalid or expired token" });
   }
