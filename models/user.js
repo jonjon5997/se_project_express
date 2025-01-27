@@ -30,4 +30,27 @@ const userSchema = new mongoose.Schema({
   },
 });
 
+// Static method for finding user by credentials
+userSchema.statics.findUserByCredentials = function (email, password) {
+  return this.findOne({ email })
+    .select("+password") // Include password in the query
+    .then((user) => {
+      if (!user) {
+        // Reject if no user is found
+        return Promise.reject(new Error("Invalid credentials"));
+      }
+
+      // Compare the provided password with the hashed password in the database
+      return bcrypt.compare(password, user.password).then((isMatch) => {
+        if (!isMatch) {
+          // Reject if the password does not match
+          return Promise.reject(new Error("Invalid credentials"));
+        }
+
+        // Return the user if credentials are valid
+        return user;
+      });
+    });
+};
+
 module.exports = mongoose.model("user", userSchema);

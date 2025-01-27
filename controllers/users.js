@@ -24,15 +24,13 @@ const createUser = (req, res) => {
       User.create({ name, avatar, email, password: hashedPassword })
     )
 
-    .then((user) =>
-      res.status(201).send({
-        // Exclude password from the response
-        name: user.name,
-        avatar: user.avatar,
-        email: user.email,
-        _id: user._id,
-      })
-    )
+    .then((user) => {
+      // Remove password before sending the response
+      const userWithoutPassword = user.toObject(); // Convert to plain JavaScript object
+      delete userWithoutPassword.password;
+
+      res.status(201).send(userWithoutPassword);
+    })
     .catch((err) => {
       console.error(err);
       // Handle duplicate email error
