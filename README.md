@@ -25,7 +25,7 @@ Node.js: Backend runtime for building the API.
 Express.js: Web framework used to define routes and handle HTTP requests/responses.
 MongoDB: NoSQL database for storing clothing items and user data.
 Mongoose: Object Data Modeling (ODM) library to define schemas, handle relationships, and query MongoDB.
-Validator.js: For validating user input, including URLs.
+.js: For validating user input, including URLs.
 Techniques:
 
 # RESTful API Design:
