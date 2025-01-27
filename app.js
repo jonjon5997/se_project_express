@@ -4,6 +4,7 @@ const mongoose = require("mongoose");
 const { login, createUser } = require("./controllers/users");
 const mainRouter = require("./routes/index");
 const auth = require("./middlewares/auth");
+const cors = require("cors");
 
 // Create an Express application
 const app = express();
@@ -40,6 +41,8 @@ app.use(auth);
 
 // use the user routes
 app.use("/users", require("./routes/users"));
+
+app.use(cors());
 
 // Start the server and listen on the specified port
 app.listen(PORT, () => {

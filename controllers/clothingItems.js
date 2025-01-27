@@ -39,13 +39,25 @@ const getItems = (req, res) => {
 
 const deleteItem = (req, res) => {
   const { itemId } = req.params;
+  const userId = req.user._id; // Get the logged-in user's ID from the request
 
-  ClothingItem.findOneAndDelete({ _id: itemId })
+  // Find the item and check ownership
+  ClothingItem.findById(itemId)
     .orFail()
-    .then((deletedItem) => {
-      res.status(200).send({
-        message: "Item successfully deleted",
-        data: deletedItem,
+    .then((item) => {
+      if (!item.owner.equals(userId)) {
+        // If the item doesn't belong to the logged-in user, return a 403 error
+        return res
+          .status(ERROR_CODES.FORBIDDEN)
+          .send({ message: "You do not have permission to delete this item" });
+      }
+
+      // If the user is the owner, proceed with deletion
+      return ClothingItem.findByIdAndDelete(itemId).then((deletedItem) => {
+        res.status(200).send({
+          message: "Item successfully deleted",
+          data: deletedItem,
+        });
       });
     })
     .catch((err) => {
