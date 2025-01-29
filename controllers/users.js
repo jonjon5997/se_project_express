@@ -13,28 +13,23 @@ const createUser = (req, res) => {
       .send({ message: "Password must be at least 8 characters long." });
   }
 
-  bcrypt
+  return bcrypt
     .hash(password, 10)
     .then((hashedPassword) =>
       User.create({ name, avatar, email, password: hashedPassword })
     )
-
     .then((user) => {
-      // Remove password before sending the response
-      const userWithoutPassword = user.toObject(); // Convert to plain JavaScript object
+      const userWithoutPassword = user.toObject();
       delete userWithoutPassword.password;
-
       return res.status(201).send(userWithoutPassword);
     })
     .catch((err) => {
       console.error(err);
-      // Handle duplicate email error
       if (err.code === 11000) {
         return res
           .status(ERROR_CODES.CONFLICT)
           .send({ message: "A user with this email already exists" });
       }
-
       if (err.name === "ValidationError") {
         return res
           .status(ERROR_CODES.BAD_REQUEST)
@@ -71,14 +66,14 @@ const getCurrentUser = (req, res) => {
 
 const updateUserProfile = (req, res) => {
   const { name, avatar } = req.body;
-  const userId = req.user._id; // Get user ID from request payload (set by auth middleware)
+  const userId = req.user._id;
 
-  User.findByIdAndUpdate(
+  return User.findByIdAndUpdate(
     userId,
     { name, avatar },
     {
-      new: true, // Return updated document
-      runValidators: true, // Ensure schema validators are applied
+      new: true,
+      runValidators: true,
     }
   )
     .then((user) => {
@@ -87,7 +82,7 @@ const updateUserProfile = (req, res) => {
           .status(ERROR_CODES.NOT_FOUND)
           .send({ message: "User not found" });
       }
-      return res.status(200).send(user); // Send the updated user
+      return res.status(200).send(user);
     })
     .catch((err) => {
       console.error(err);
