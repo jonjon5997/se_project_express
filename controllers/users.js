@@ -7,6 +7,12 @@ const { JWT_SECRET } = require("../utils/config");
 const createUser = (req, res) => {
   const { name, avatar, email, password } = req.body;
 
+  if (password.length < 8) {
+    return res
+      .status(ERROR_CODES.BAD_REQUEST)
+      .send({ message: "Password must be at least 8 characters long." });
+  }
+
   bcrypt
     .hash(password, 10)
     .then((hashedPassword) =>
