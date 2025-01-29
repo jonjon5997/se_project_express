@@ -108,7 +108,7 @@ const login = (req, res) => {
   }
 
   // Using the custom Mongoose method `findUserByCredentials`
-  User.findUserByCredentials(email, password)
+  return User.findUserByCredentials(email, password)
     .then((user) => {
       // Create a JWT token with a 7-day expiration
       const token = jwt.sign({ _id: user._id }, JWT_SECRET, {
