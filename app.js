@@ -30,19 +30,19 @@ app.use(express.json());
 //   next();
 // });
 
-// Use the main router for routes
-app.use("/", mainRouter);
-
 app.post("/signin", login);
 app.post("/signup", createUser);
 
+app.use(cors());
+
+// Use the main router for routes
+app.use("/", mainRouter);
+
 // Use the auth middleware for all protected routes
-app.use(auth);
+// app.use(auth);
 
 // use the user routes
-app.use("/users", require("./routes/users"));
-
-app.use(cors());
+// app.use("/users", require("./routes/users"));
 
 // Start the server and listen on the specified port
 app.listen(PORT, () => {
