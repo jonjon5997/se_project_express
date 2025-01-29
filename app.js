@@ -4,7 +4,7 @@ const mongoose = require("mongoose");
 const cors = require("cors");
 const { login, createUser } = require("./controllers/users");
 const mainRouter = require("./routes/index");
-const auth = require("./middlewares/auth");
+// const auth = require("./middlewares/auth");
 
 // Create an Express application
 const app = express();

@@ -24,7 +24,7 @@ const createUser = (req, res) => {
       const userWithoutPassword = user.toObject(); // Convert to plain JavaScript object
       delete userWithoutPassword.password;
 
-      res.status(201).send(userWithoutPassword);
+      return res.status(201).send(userWithoutPassword);
     })
     .catch((err) => {
       console.error(err);
@@ -121,7 +121,7 @@ const login = (req, res) => {
       });
 
       // Send the token in the response body
-      res.status(200).send({ token });
+      return res.status(200).send({ token });
     })
     .catch((err) => {
       console.error(err);
@@ -134,7 +134,7 @@ const login = (req, res) => {
       }
 
       // Handle any other errors with a 500 status code
-      res
+      return res
         .status(ERROR_CODES.SERVER_ERROR)
         .send({ message: "Internal Server Error" });
     });
