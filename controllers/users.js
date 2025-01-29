@@ -4,17 +4,6 @@ const User = require("../models/user");
 const { ERROR_CODES } = require("../utils/constants");
 const { JWT_SECRET } = require("../utils/config");
 
-const getUsers = (req, res) => {
-  User.find({})
-    .then((users) => res.status(200).send(users))
-    .catch((err) => {
-      console.error(err);
-      return res
-        .status(ERROR_CODES.SERVER_ERROR)
-        .send({ message: "An error has occurred on the server" });
-    });
-};
-
 const createUser = (req, res) => {
   const { name, avatar, email, password } = req.body;
 
@@ -52,7 +41,7 @@ const createUser = (req, res) => {
 };
 
 const getCurrentUser = (req, res) => {
-  const { userId } = req.user;
+  const userId = req.user._id;
   User.findById(userId)
     .orFail()
     .then((user) => res.status(200).send(user))
@@ -107,11 +96,15 @@ const updateUserProfile = (req, res) => {
     });
 };
 
-// create login controller that gets email and pasword from
-// the request and authenticates them
-//
 const login = (req, res) => {
   const { email, password } = req.body;
+
+  // Check if email or password is missing
+  if (!email || !password) {
+    return res
+      .status(ERROR_CODES.BAD_REQUEST)
+      .send({ message: "Email and password are required" });
+  }
 
   // Using the custom Mongoose method `findUserByCredentials`
   User.findUserByCredentials(email, password)
@@ -126,15 +119,22 @@ const login = (req, res) => {
     })
     .catch((err) => {
       console.error(err);
-      // Return a 401 Unauthorized error if authentication fails
+
+      // Handle authentication failure (wrong credentials)
+      if (err.message === "Invalid credentials") {
+        return res
+          .status(ERROR_CODES.UNAUTHORIZED)
+          .send({ message: "Invalid email or password" });
+      }
+
+      // Handle any other errors with a 500 status code
       res
-        .status(ERROR_CODES.UNAUTHORIZED)
-        .send({ message: "Invalid email or password" });
+        .status(ERROR_CODES.SERVER_ERROR)
+        .send({ message: "Internal Server Error" });
     });
 };
 
 module.exports = {
-  getUsers,
   createUser,
   getCurrentUser,
   login,
