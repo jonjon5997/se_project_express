@@ -26,7 +26,7 @@ const userSchema = new mongoose.Schema({
   password: {
     type: String,
     required: [true, "The password field is required."],
-    select: false, // Ensures the password is not returned in queries by default
+    // select: false, // Ensures the password is not returned in queries by default
   },
 });
 
@@ -35,6 +35,7 @@ userSchema.statics.findUserByCredentials = function (email, password) {
   return this.findOne({ email })
     .select("+password") // Include password in the query
     .then((user) => {
+      console.log(user);
       if (!user) {
         // Reject if no user is found
         return Promise.reject(new Error("Invalid credentials"));

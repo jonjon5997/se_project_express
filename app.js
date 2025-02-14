@@ -29,11 +29,9 @@ app.use(express.json());
 //   };
 //   next();
 // });
-
+app.use(cors());
 app.post("/signin", login);
 app.post("/signup", createUser);
-
-app.use(cors());
 
 // Use the main router for routes
 app.use("/", mainRouter);
