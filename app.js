@@ -4,6 +4,7 @@ const mongoose = require("mongoose");
 const cors = require("cors");
 const { login, createUser } = require("./controllers/users");
 const mainRouter = require("./routes/index");
+const errorHandler = require("./middlewares/error-handler");
 // const auth = require("./middlewares/auth");
 
 // Create an Express application
@@ -35,6 +36,9 @@ app.post("/signup", createUser);
 
 // Use the main router for routes
 app.use("/", mainRouter);
+
+// Centralized error handling middleware
+app.use(errorHandler);
 
 // Use the auth middleware for all protected routes
 // app.use(auth);

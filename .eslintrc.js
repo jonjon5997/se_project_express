@@ -23,5 +23,6 @@ module.exports = {
     "no-console": ["warn", { allow: ["error"] }],
     // Allow _id (used in MongoDB) while enforcing no dangling underscores elsewhere
     "no-underscore-dangle": ["error", { allow: ["_id"] }],
+    "no-unused-vars": ["error", { argsIgnorePattern: "next" }],
   },
 };
