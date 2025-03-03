@@ -5,6 +5,8 @@ const cors = require("cors");
 const { login, createUser } = require("./controllers/users");
 const mainRouter = require("./routes/index");
 const errorHandler = require("./middlewares/error-handler");
+const { errors } = require("celebrate");
+const { requestLogger, errorLogger } = require("./middlewares/logger");
 // const auth = require("./middlewares/auth");
 
 // Create an Express application
@@ -34,8 +36,13 @@ app.use(cors());
 app.post("/signin", login);
 app.post("/signup", createUser);
 
+app.use(requestLogger);
+
 // Use the main router for routes
 app.use("/", mainRouter);
+
+app.use(errorLogger); // enabling the error logger
+app.use(errors());
 
 // Centralized error handling middleware
 app.use(errorHandler);
