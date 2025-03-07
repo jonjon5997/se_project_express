@@ -8,6 +8,7 @@ const errorHandler = require("./middlewares/error-handler");
 const { errors } = require("celebrate");
 const { requestLogger, errorLogger } = require("./middlewares/logger");
 // const auth = require("./middlewares/auth");
+require("dotenv").config();
 
 // Create an Express application
 const app = express();
