@@ -137,6 +137,9 @@ module.exports.validateClothingItem = celebrate({
       .messages({
         "any.required": "Image URL is required.",
       }),
+    weather: Joi.string().required().messages({
+      "any.required": "Image URL is required.",
+    }),
   }),
 });
 

@@ -235,10 +235,10 @@ const getItems = (req, res, next) => {
 };
 
 const deleteItem = (req, res, next) => {
-  const { itemId } = req.params;
+  const { id } = req.params;
   const userId = req.user._id; // Get the logged-in user's ID
 
-  ClothingItem.findById(itemId)
+  ClothingItem.findById(id)
     .orFail()
     .then((item) => {
       if (!item.owner.equals(userId)) {
@@ -246,7 +246,7 @@ const deleteItem = (req, res, next) => {
           new ForbiddenError("You do not have permission to delete this item")
         );
       }
-      return ClothingItem.findByIdAndDelete(itemId);
+      return ClothingItem.findByIdAndDelete(id);
     })
     .then((deletedItem) =>
       res
@@ -265,10 +265,10 @@ const deleteItem = (req, res, next) => {
 };
 
 const likeItem = (req, res, next) => {
-  const { itemId } = req.params;
+  const { id } = req.params;
 
   ClothingItem.findByIdAndUpdate(
-    itemId,
+    id,
     { $addToSet: { likes: req.user._id } }, // Prevent duplicate likes
     { new: true } // Return the updated document
   )
@@ -286,10 +286,10 @@ const likeItem = (req, res, next) => {
 };
 
 const unlikeItem = (req, res, next) => {
-  const { itemId } = req.params;
+  const { id } = req.params;
 
   ClothingItem.findByIdAndUpdate(
-    itemId,
+    id,
     { $pull: { likes: req.user._id } }, // Remove the user's ID
     { new: true } // Return the updated document
   )
