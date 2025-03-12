@@ -37,3 +37,7 @@ Schema Validation: Uses Mongoose schemas to enforce strict validation rules for 
 Modular Architecture: Organizes the codebase into separate files for controllers, routes, and models to maintain clarity and reusability.
 Efficient Updates: Uses MongoDB operators like $addToSet and $pull for atomic updates to the likes array, ensuring high performance.
 Error Codes: Implements a constants file for error codes to standardize responses across the API
+
+# Domain Name
+
+jonjy-wtwr.twilightparadox.com
