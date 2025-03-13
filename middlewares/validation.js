@@ -79,3 +79,24 @@ module.exports.validateId = celebrate({
     }),
   }),
 });
+
+// 5. Validate Updating User Profile
+module.exports.validateUserProfile = celebrate({
+  body: Joi.object().keys({
+    name: Joi.string().min(2).max(30).messages({
+      "string.min": "Name must be at least 2 characters long.",
+      "string.max": "Name must be at most 30 characters long.",
+    }),
+    avatar: Joi.string()
+      .custom((value, helpers) => {
+        if (!validator.isURL(value)) {
+          return helpers.message("Avatar must be a valid URL.");
+        }
+        return value;
+      })
+      .required()
+      .messages({
+        "any.required": "Avatar URL is required.",
+      }),
+  }),
+});
