@@ -1,13 +1,11 @@
 // middlewares/error-handler.js
 
-// middlewares/error-handler.js
-const {
-  BadRequestError,
-  UnauthorizedError,
-  ForbiddenError,
-  NotFoundError,
-  ConflictError,
-} = require("../errors/custom-errors"); // Import the error classes
+// Import the error classes
+const BadRequestError = require("../errors/badRequestError");
+const NotFoundError = require("../errors/notFoundError");
+const ForbiddenError = require("../errors/forbiddenError");
+const ConflictError = require("../errors/conflictError");
+const UnauthorizedError = require("../errors/unauthorizedError");
 
 const errorHandler = (err, req, res, next) => {
   console.error(err.stack); // Log the error stack trace

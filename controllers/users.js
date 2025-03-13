@@ -3,11 +3,10 @@ const bcrypt = require("bcryptjs");
 const User = require("../models/user");
 const { ERROR_CODES } = require("../utils/constants");
 const { JWT_SECRET } = require("../utils/config");
-const {
-  BadRequestError,
-  NotFoundError,
-  ConflictError,
-} = require("../errors/custom-errors");
+
+const BadRequestError = require("../errors/badRequestError");
+const NotFoundError = require("../errors/notFoundError");
+const ConflictError = require("../errors/conflictError");
 
 const createUser = (req, res, next) => {
   const { name, avatar, email, password } = req.body;
