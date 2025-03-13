@@ -3,7 +3,11 @@ const bcrypt = require("bcryptjs");
 const User = require("../models/user");
 const { ERROR_CODES } = require("../utils/constants");
 const { JWT_SECRET } = require("../utils/config");
-const { BadRequestError, NotFoundError } = require("../errors/custom-errors");
+const {
+  BadRequestError,
+  NotFoundError,
+  ConflictError,
+} = require("../errors/custom-errors");
 
 const createUser = (req, res, next) => {
   const { name, avatar, email, password } = req.body;
@@ -23,6 +27,16 @@ const createUser = (req, res, next) => {
       const userWithoutPassword = user.toObject();
       delete userWithoutPassword.password;
       res.status(201).send(userWithoutPassword);
+    })
+    .catch((err) => {
+      if (err.code === 11000) {
+        return next(
+          new ConflictError("A user with this email already exists.")
+        );
+      }
+      if (err.name === "ValidationError") {
+        return next(new BadRequestError("Invalid user data."));
+      }
     })
     .catch(next); // Pass error to error handler
 };
