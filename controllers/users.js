@@ -45,7 +45,12 @@ const getCurrentUser = (req, res, next) => {
   User.findById(req.user._id)
     .orFail()
     .then((user) => res.status(200).send(user))
-    .catch(next); // Pass error to error handler
+    .catch((err) => {
+      if (err.name === "DocumentNotFoundError") {
+        return next(new NotFoundError("Item Not Found"));
+      }
+      next(err); // catch any other errors and pass them to the error handler
+    });
 };
 
 const updateUserProfile = (req, res, next) => {
@@ -61,6 +66,11 @@ const updateUserProfile = (req, res, next) => {
         return next(new NotFoundError("User not found"));
       }
       res.status(200).send(user);
+    })
+    .catch((err) => {
+      if (err.name === "ValidationError") {
+        return next(new BadRequestError("Invalid user data."));
+      }
     })
     .catch(next); // Pass error to error handler
 };
