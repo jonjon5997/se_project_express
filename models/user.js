@@ -1,6 +1,7 @@
 const mongoose = require("mongoose");
 const validator = require("validator");
 const bcrypt = require("bcryptjs");
+const UnauthorizedError = require("../errors/unauthorizedError");
 
 const userSchema = new mongoose.Schema({
   name: { type: String, required: true, minlength: 2, maxlength: 30 },
@@ -26,7 +27,7 @@ const userSchema = new mongoose.Schema({
   password: {
     type: String,
     required: [true, "The password field is required."],
-    // select: false, // Ensures the password is not returned in queries by default
+    select: false, // Ensures the password is not returned in queries by default
   },
 });
 
@@ -38,14 +39,14 @@ userSchema.statics.findUserByCredentials = function (email, password) {
       console.log(user);
       if (!user) {
         // Reject if no user is found
-        return Promise.reject(new Error("Invalid credentials"));
+        return Promise.reject(new UnauthorizedError("Invalid Credentials"));
       }
 
       // Compare the provided password with the hashed password in the database
       return bcrypt.compare(password, user.password).then((isMatch) => {
         if (!isMatch) {
           // Reject if the password does not match
-          return Promise.reject(new Error("Invalid credentials"));
+          return Promise.reject(new UnauthorizedError("Invalid Credentials"));
         }
 
         // Return the user if credentials are valid

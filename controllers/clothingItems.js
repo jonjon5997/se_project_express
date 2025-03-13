@@ -1,5 +1,4 @@
 const ClothingItem = require("../models/clothingItem");
-const { ERROR_CODES } = require("../utils/constants");
 
 const BadRequestError = require("../errors/badRequestError");
 const NotFoundError = require("../errors/notFoundError");
