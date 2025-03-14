@@ -5,10 +5,11 @@ require("dotenv").config();
 const express = require("express"); // Import Express
 const mongoose = require("mongoose");
 const cors = require("cors");
+const { errors, celebrate, Joi } = require("celebrate");
 const { login, createUser } = require("./controllers/users");
 const mainRouter = require("./routes/index");
 const errorHandler = require("./middlewares/error-handler");
-const { errors, celebrate, Joi } = require("celebrate");
+
 const { requestLogger, errorLogger } = require("./middlewares/logger");
 
 // Create an Express application
