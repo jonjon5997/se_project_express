@@ -15,9 +15,9 @@ const auth = (req, res, next) => {
   try {
     const payload = jwt.verify(token, JWT_SECRET);
     req.user = payload; // Attach the token payload to the request object
-    next(); // Proceed to the next middleware or route handler
+    return next(); // Proceed to the next middleware or route handler
   } catch (err) {
-    next(new UnauthorizedError("Invalid or expired token"));
+    return next(new UnauthorizedError("Invalid or expired token"));
   }
 };
 

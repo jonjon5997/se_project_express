@@ -16,7 +16,7 @@ const createUser = (req, res, next) => {
     );
   }
 
-  bcrypt
+  return bcrypt
     .hash(password, 10)
     .then((hashedPassword) =>
       User.create({ name, avatar, email, password: hashedPassword })
@@ -35,8 +35,8 @@ const createUser = (req, res, next) => {
       if (err.name === "ValidationError") {
         return next(new BadRequestError("Invalid user data."));
       }
-    })
-    .catch(next); // Pass error to error handler
+      return next(err); // Ensures consistent return
+    });
 };
 
 const getCurrentUser = (req, res, next) => {
@@ -45,9 +45,9 @@ const getCurrentUser = (req, res, next) => {
     .then((user) => res.status(200).send(user))
     .catch((err) => {
       if (err.name === "DocumentNotFoundError") {
-        return next(new NotFoundError("Item Not Found"));
+        return next(new NotFoundError("User not found"));
       }
-      next(err); // catch any other errors and pass them to the error handler
+      return next(err); // Ensures consistent return
     });
 };
 
@@ -63,14 +63,14 @@ const updateUserProfile = (req, res, next) => {
       if (!user) {
         return next(new NotFoundError("User not found"));
       }
-      res.status(200).send(user);
+      return res.status(200).send(user);
     })
     .catch((err) => {
       if (err.name === "ValidationError") {
         return next(new BadRequestError("Invalid user data."));
       }
-    })
-    .catch(next); // Pass error to error handler
+      return next(err); // Ensures consistent return
+    });
 };
 
 const login = (req, res, next) => {
@@ -80,14 +80,14 @@ const login = (req, res, next) => {
     return next(new BadRequestError("Email and password are required"));
   }
 
-  User.findUserByCredentials(email, password)
+  return User.findUserByCredentials(email, password)
     .then((user) => {
       const token = jwt.sign({ _id: user._id }, JWT_SECRET, {
         expiresIn: "7d",
       });
       res.status(200).send({ token });
     })
-    .catch(next); // Pass error to error handler
+    .catch(next);
 };
 
 module.exports = { createUser, getCurrentUser, login, updateUserProfile };

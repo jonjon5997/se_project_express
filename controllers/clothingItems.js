@@ -13,7 +13,7 @@ const createItem = (req, res, next) => {
       if (err.name === "ValidationError") {
         return next(new BadRequestError("Invalid input data"));
       }
-      next(err); // Pass the error to the middleware
+      return next(err); // Pass the error to the middleware
     });
 };
 
@@ -52,7 +52,7 @@ const deleteItem = (req, res, next) => {
       if (err.name === "CastError") {
         return next(new BadRequestError("Invalid item ID format"));
       }
-      next(err); // Pass error to middleware
+      return next(err); // Pass error to middleware
     });
 };
 
@@ -73,7 +73,7 @@ const likeItem = (req, res, next) => {
       if (err.name === "DocumentNotFoundError") {
         return next(new NotFoundError("Item not found"));
       }
-      next(err); // Pass error to middleware
+      return next(err); // Pass error to middleware
     });
 };
 
@@ -94,7 +94,7 @@ const unlikeItem = (req, res, next) => {
       if (err.name === "DocumentNotFoundError") {
         return next(new NotFoundError("Item not found"));
       }
-      next(err); // Pass error to middleware
+      return next(err); // Pass error to middleware
     });
 };
 
